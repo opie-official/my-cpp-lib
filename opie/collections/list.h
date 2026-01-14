@@ -12,7 +12,9 @@
 #include "iterator.h"
 #include "interfaces/iallocator.h"
 #include "interfaces/iarray.h"
+#include "interfaces/iindexable.h"
 #include "interfaces/iiterable.h"
+#include "interfaces/imanipulatable.h"
 #include "types/allocator.h"
 #include "types/option.h"
 
@@ -20,7 +22,7 @@
 namespace opie {
     template<typename T, typename Alloc=Allocator<T> >
         requires std::is_base_of_v<IAllocator<T>, Alloc>
-    class List : public IArray<T>, public IIterable<T> {
+    class List : public IArray<T>, public IIterable<T>, public IIndexable<T>, public IManipulatable<List<T>, T, List<T>> {
         T *_data = nullptr;
         size_t _size = 0;
         size_t _cap = 2;
@@ -45,7 +47,7 @@ namespace opie {
 
         List &operator=(List &&other) noexcept;
 
-        Option<T &> operator[](size_t i) const;
+        Option<T &> operator[](size_t i) const noexcept override;
 
         void set(const T &elem, size_t i);
 
@@ -56,25 +58,29 @@ namespace opie {
         [[nodiscard]] size_t capacity() const;
 
 
-        List &append(const T &el);
+        List &append(const T &el) override;
 
-        List &appendRange(const List<T> &el);
+        List &appendRange(const List<T> &el) override;
 
-        List &insert(const T &elem, size_t i);
+        List &insert(const T &elem, size_t i) override;
 
-        List &insertRange(const List<T> &elem, size_t i);
+        List &insertRange(const List<T> &elem, size_t i) override;
 
-        List &removeFirst(const T &elem);
+        List &removeFirst(const T &elem)override;
 
-        List &removeAll(const T &elem);
+        List &removeAll(const T &elem) override;
 
-        List &removeByIndex(size_t i);
+        List &removeByIndex(size_t i) override;
 
         List &removeFromTo(size_t start, size_t end);
+
+        List<T> & removeLast(const T &el) override;
 
         List &shrink(size_t divisor = 2);
 
         List &clear();
+
+
 
         List filter(const std::function<bool(const T &)> &cb) const;
 
@@ -149,7 +155,6 @@ namespace opie {
         void foreach(const std::function<bool(const T &)> &cb) const;
 
         void foreach(const std::function<bool(const T &, size_t)> &cb) const;
-
 
         List<T> reverse() const;
 
@@ -246,7 +251,7 @@ namespace opie {
     }
 
     template<typename T, typename Alloc> requires std::is_base_of_v<IAllocator<T>, Alloc>
-    Option<T &> List<T, Alloc>::operator[](size_t i) const {
+    Option<T &> List<T, Alloc>::operator[](size_t i) const noexcept{
         if (i < _size) {
             return _data[i];
         }

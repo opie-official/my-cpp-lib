@@ -14,7 +14,15 @@ add_executable(opie_declarative_lib main.cpp
         opie/interfaces/iallocator.h
         opie/utils.h
         opie/collections/array.h
-        opie/interfaces/iiterable.h)
+        opie/interfaces/iiterable.h
+        opie/interfaces/iindexable.h
+        opie/interfaces/istr.h
+        opie/collections/linked_list.h
+        opie/interfaces/icastable.h
+        opie/interfaces/icollectable.h
+        opie/interfaces/imanipulatable.h
+        opie/interfaces/ievaluatable.h
+)
 
 
 
