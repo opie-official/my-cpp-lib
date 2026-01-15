@@ -25,9 +25,9 @@ namespace opie {
         virtual T reduce(const std::function<T(const T&acc, const T&el)>&cb, const T&def=T{})const=0;
         virtual T reduce(const std::function<T(const T&acc, const T&el, size_t)>&cb, const T&def=T{})const=0;
 
-        virtual Option<T> find(const T&el)const=0;
-        virtual Option<T> find(const std::function<bool(const T&)>&cb)const=0;
-        virtual Option<T> find(const std::function<bool(const T&, size_t)>&ecb)const=0;
+        virtual Option<size_t> find(const T&el)const=0;
+        virtual Option<size_t> find(const std::function<bool(const T&)>&cb)const=0;
+        virtual Option<size_t> find(const std::function<bool(const T&, size_t)>&ecb)const=0;
 
         virtual bool contains(const T&el)const=0;
         virtual bool contains(const std::function<bool(const T&)>&cb)const=0;

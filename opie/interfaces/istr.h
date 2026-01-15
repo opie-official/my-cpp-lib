@@ -14,7 +14,14 @@ namespace opie {
     interface IStr {
         virtual ~IStr() = default;
         virtual std::string toString()const=0;
+        virtual std::string toString(const std::string&sep)const=0;
+        virtual std::string toStringOut()const=0;
     };
+
+    std::ostream &operator<<(std::ostream&os, IStr&str) {
+        os<<str.toStringOut();
+        return os;
+    }
 }
 
 

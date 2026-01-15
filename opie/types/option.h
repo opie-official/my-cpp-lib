@@ -41,13 +41,15 @@ namespace opie {
         Option(const Option &other) {
             if (other.hasValue()) {
                 new(&val) T{other.unwrap()};
+                has=true;
             }
         }
 
         Option(Option &&other) noexcept {
-            has = std::move(other.val);
             if (other.hasValue()) {
                 new(&val) T{std::move(other.unwrap())};
+                has = true;
+                other.has = false;
             }
         }
 
@@ -56,6 +58,16 @@ namespace opie {
         }
 
         T &unwrap() const {
+            if (has) {
+                return val;
+            }
+#ifdef OPTION_ABORT
+            std::abort();
+#else
+            std::exit(1);
+#endif
+        }
+const T &unwrap() {
             if (has) {
                 return val;
             }
@@ -91,7 +103,7 @@ namespace opie {
         Option(const NoneValue &_) {
         }
 
-        Option(const T &el) {
+        Option(T &el) {
             val = &el;
         }
 
@@ -125,8 +137,57 @@ namespace opie {
         }
     };
 
+
+    template<typename T>
+    class Option<const T &> {
+        const T *val = nullptr;
+
+    public:
+        Option() = default;
+
+        Option(const NoneValue &_) {
+        }
+
+        Option(const T &el) {
+            val = &el;
+        }
+
+        ~Option() = default;
+
+        Option(const Option &other) {
+            val = other.val;
+        }
+
+        Option(Option &&other) noexcept {
+            val = other.val;
+        }
+
+        [[nodiscard]] bool hasValue() const {
+            return val != nullptr;
+        }
+
+        [[nodiscard]] const T &unwrap() const {
+            if (val != nullptr) {
+                return *val;
+            }
+#ifdef OPTION_ABORT
+            std::abort();
+#else
+            std::exit(1);
+#endif
+        }
+
+        void unwrap(T *&ptr) const {
+            ptr = val;
+        }
+    };
+
     template<typename T>
     Option<T> Some(const T &el) {
+        return Option<T>{el};
+    }
+    template<typename T>
+    Option<T> Some(T &el) {
         return Option<T>{el};
     }
 

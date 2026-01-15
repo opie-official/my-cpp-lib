@@ -19,7 +19,6 @@ namespace opie {
 
         virtual FOR &removeFirst(const T &el) =0;
 
-        virtual FOR &removeLast(const T &el) =0;
 
         virtual FOR &removeAll(const T &el) =0;
 

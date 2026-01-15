@@ -12,6 +12,7 @@ namespace opie {
     interface IAllocator {
         virtual ~IAllocator() = default;
         virtual T* alloc(size_t size)const =0;
+
         virtual void free(T*ptr)const=0;
     };
 }

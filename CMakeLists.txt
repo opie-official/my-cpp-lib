@@ -3,6 +3,7 @@ project(opie_declarative_lib)
 
 set(CMAKE_CXX_STANDARD 26)
 
+
 add_executable(opie_declarative_lib main.cpp
         opie/collections/list.h
         opie/defines.h
@@ -22,6 +23,7 @@ add_executable(opie_declarative_lib main.cpp
         opie/interfaces/icollectable.h
         opie/interfaces/imanipulatable.h
         opie/interfaces/ievaluatable.h
+        opie/io.h
 )
 
 
